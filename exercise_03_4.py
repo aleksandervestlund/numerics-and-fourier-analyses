@@ -9,13 +9,6 @@ def f(x: float) -> float:
 def trapezoidal_rule(
     function: Callable[[float], float], a: float, b: float, m: int
 ) -> float:
-    """Trapezoidal rule
-    :param `f`: Function to be integrated
-    :param `a`: Beginning of interval
-    :param `b`: End of interval
-    :param `m`: Amount of interpolation points
-    :return: Value of integral
-    """
     xs = np.linspace(a, b, m + 1)
     ys = [function(x) for x in xs]
     s = ys[0] + ys[-1] + 2 * sum(ys[1:-1])

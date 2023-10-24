@@ -24,8 +24,6 @@ def compute_error(a: float, b: float, n: int) -> float:
 
 
 def main() -> None:
-    # print(max(abs(f_prime_2(np.linspace(np.pi / 6, np.pi / 3, 100)))))
-
     x_values = np.array(
         [
             -math.sqrt(525 + 70 * math.sqrt(30)) / 35,
