@@ -1,40 +1,41 @@
-from matplotlib import pyplot as plt
+import math
 import numpy as np
+import matplotlib.pyplot as plt
 
 
-def s(x, n):
-    a_0, a_n, b_n = fourier_series_a(n)
-    return a_0 + sum(
-        a_n[i] * np.cos((i + 1) * x) + b_n[i] * np.sin((i + 1) * x)
-        for i in range(n)
-    )
+# Define the truncated series function
+def truncated_series(x: np.ndarray, n: int) -> np.ndarray:
+    result = 0 * x
+    a_0 = math.pi / 4
 
+    for m in range(1, n + 1):
+        a_n = (
+            -2
+            + 2 * math.cos((math.pi * m) / 2)
+            + math.pi * m * math.sin(math.pi * m / 2) / 2 * m**2
+        ) + (
+            -math.cos((math.pi * m) / 2)
+            - math.pi * m * math.sin(math.pi * m / 2)
+            + (-1) ** m
+        ) / (
+            math.pi * m**2
+        )
+        b_n = 0.0
+        result += a_n * np.cos(m * x) + b_n * np.sin(m * x)
 
-def fourier_series_a(N):
-    a_0 = np.pi / 16
-    a_n = np.array(
-        [
-            np.sin(n * np.pi / 2) / (2 * n)
-            + np.cos(n * np.pi / 2) / (np.pi * n**2)
-            - np.sin(n * np.pi / 2) / (np.pi * n**2)
-            for n in range(1, N + 1)
-        ]
-    )
-    b_n = np.array(
-        [
-            1 / (np.pi * n**2) * np.sin(n * np.pi / 2)
-            - 1 / (2 * n) * np.cos(n * np.pi / 2)
-            for n in range(1, N + 1)
-        ]
-    )
-    return a_0, a_n, b_n
+    return a_0 + result
 
 
 def main() -> None:
-    for n in (1000,):
-        x_values = np.linspace(-3 * np.pi, 3 * np.pi, n)
-        plt.plot(x_values, s(x_values, n), label=f"N = {n}")
+    x_values = np.linspace(-3.0 * np.pi, 3.0 * np.pi, 1000)
+
+    for N in (5, 20, 100):
+        plt.plot(x_values, truncated_series(x_values, N), label=f"{N = }")
+
     plt.legend()
+    plt.xlabel("x")
+    plt.ylabel("S_N(x)")
+    plt.title("Truncated Series")
     plt.show()
 
 
