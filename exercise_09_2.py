@@ -1,4 +1,3 @@
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -6,19 +5,19 @@ import matplotlib.pyplot as plt
 # Define the truncated series function
 def truncated_series(x: np.ndarray, n: int) -> np.ndarray:
     result = 0 * x
-    a_0 = math.pi / 4
+    a_0 = np.pi / 4
 
     for m in range(1, n + 1):
         a_n = (
             -2
-            + 2 * math.cos((math.pi * m) / 2)
-            + math.pi * m * math.sin(math.pi * m / 2) / 2 * m**2
+            + 2 * np.cos((np.pi * m) / 2)
+            + np.pi * m * np.sin(np.pi * m / 2) / 2 * m**2
         ) + (
-            -math.cos((math.pi * m) / 2)
-            - math.pi * m * math.sin(math.pi * m / 2)
+            -np.cos((np.pi * m) / 2)
+            - np.pi * m * np.sin(np.pi * m / 2)
             + (-1) ** m
         ) / (
-            math.pi * m**2
+            np.pi * m**2
         )
         b_n = 0.0
         result += a_n * np.cos(m * x) + b_n * np.sin(m * x)
