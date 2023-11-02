@@ -1,41 +1,118 @@
+from collections.abc import Callable
+from functools import partial
 import numpy as np
 import matplotlib.pyplot as plt
 
 
+X_VALUES = np.linspace(-3.0 * np.pi, 3.0 * np.pi, 1000)
+
+
 # Define the truncated series function
-def truncated_series(x: np.ndarray, n: int) -> np.ndarray:
-    result = 0 * x
-    a_0 = np.pi / 4
+def truncated_series(
+    x: np.ndarray,
+    n: int,
+    a_0: float,
+    a_n: Callable[[int], float],
+    b_n: Callable[[int], float],
+) -> np.ndarray:
+    result = a_0 * np.ones_like(x)
 
     for m in range(1, n + 1):
-        a_n = (
-            -2
-            + 2 * np.cos((np.pi * m) / 2)
-            + np.pi * m * np.sin(np.pi * m / 2) / 2 * m**2
-        ) + (
-            -np.cos((np.pi * m) / 2)
-            - np.pi * m * np.sin(np.pi * m / 2)
-            + (-1) ** m
-        ) / (
-            np.pi * m**2
-        )
-        b_n = 0.0
-        result += a_n * np.cos(m * x) + b_n * np.sin(m * x)
+        result += a_n(m) * np.cos(m * x) + b_n(m) * np.sin(m * x)
 
-    return a_0 + result
+    return result
 
 
-def main() -> None:
-    x_values = np.linspace(-3.0 * np.pi, 3.0 * np.pi, 1000)
+def exercise_a() -> partial:
+    def f(x: float) -> float:
+        while x < -np.pi:
+            x += 2 * np.pi
+        while x > np.pi:
+            x -= 2 * np.pi
 
-    for N in (5, 20, 100):
-        plt.plot(x_values, truncated_series(x_values, N), label=f"{N = }")
+        if 0 <= x < np.pi / 2:
+            return x
+        return 0.0
+
+    def a_n(n: int) -> float:
+        return (
+            np.pi * n * np.sin(n * np.pi / 2) + 2 * np.cos(n * np.pi / 2) - 2
+        ) / (2 * np.pi * n**2)
+
+    def b_n(n: int) -> float:
+        return (
+            2 * np.sin(n * np.pi / 2) - np.pi * n * np.cos(n * np.pi / 2)
+        ) / (2 * np.pi * n**2)
+
+    plt.plot(X_VALUES, [f(x_value) for x_value in X_VALUES], label="f_a(x)")
+    return partial(
+        truncated_series, x=X_VALUES, a_0=np.pi / 16, a_n=a_n, b_n=b_n
+    )
+
+
+def exercise_b() -> partial:
+    def f(x: float) -> float:
+        while x < -np.pi:
+            x += 2 * np.pi
+        while x > np.pi:
+            x -= 2 * np.pi
+
+        if x <= 0:
+            return 0.0
+        if x <= np.pi / 2:
+            return x
+        return np.pi - x
+
+    def a_n(n: int) -> float:
+        return (2 * np.cos(n * np.pi / 2) - (-1) ** n - 1) / (np.pi * n**2)
+
+    def b_n(n: int) -> float:
+        return 2 * np.sin(np.pi * n / 2) / (np.pi * n**2)
+
+    plt.plot(X_VALUES, [f(x_value) for x_value in X_VALUES], label="f_b(x)")
+    return partial(
+        truncated_series, x=X_VALUES, a_0=np.pi / 8, a_n=a_n, b_n=b_n
+    )
+
+
+def exercise_c() -> partial:
+    def f(x: float) -> float:
+        while x < -np.pi:
+            x += 2 * np.pi
+        while x > np.pi:
+            x -= 2 * np.pi
+
+        if x <= -np.pi / 2:
+            return -(np.pi + x)
+        if x <= np.pi / 2:
+            return x
+        return np.pi - x
+
+    def a_n(n: int) -> float:
+        return 0.0 * n
+
+    def b_n(n: int) -> float:
+        return (4 * np.sin(np.pi * n / 2)) / (np.pi * n**2)
+
+    plt.plot(X_VALUES, [f(x_value) for x_value in X_VALUES], label="f_c(x)")
+    return partial(truncated_series, x=X_VALUES, a_0=0.0, a_n=a_n, b_n=b_n)
+
+
+def plot_truncated_series(s_n: partial) -> None:
+    for n in (5, 20, 100):
+        plt.plot(X_VALUES, s_n(n=n), label=f"S_{n}(x)")
 
     plt.legend()
     plt.xlabel("x")
     plt.ylabel("S_N(x)")
     plt.title("Truncated Series")
     plt.show()
+
+
+def main() -> None:
+    plot_truncated_series(exercise_a())
+    plot_truncated_series(exercise_b())
+    plot_truncated_series(exercise_c())
 
 
 if __name__ == "__main__":
