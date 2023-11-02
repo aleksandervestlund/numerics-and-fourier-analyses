@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-X_VALUES = np.linspace(-3.0 * np.pi, 3.0 * np.pi, 1000)
+X_VALUES = np.linspace(-3 * np.pi, 3 * np.pi, 1000)
 
 
 # Define the truncated series function
@@ -23,7 +23,7 @@ def truncated_series(
     return result
 
 
-def exercise_a() -> partial:
+def exercise_a() -> partial[np.ndarray]:
     def f(x: float) -> float:
         while x < -np.pi:
             x += 2 * np.pi
@@ -50,7 +50,7 @@ def exercise_a() -> partial:
     )
 
 
-def exercise_b() -> partial:
+def exercise_b() -> partial[np.ndarray]:
     def f(x: float) -> float:
         while x < -np.pi:
             x += 2 * np.pi
@@ -75,7 +75,7 @@ def exercise_b() -> partial:
     )
 
 
-def exercise_c() -> partial:
+def exercise_c() -> partial[np.ndarray]:
     def f(x: float) -> float:
         while x < -np.pi:
             x += 2 * np.pi
@@ -98,7 +98,7 @@ def exercise_c() -> partial:
     return partial(truncated_series, x=X_VALUES, a_0=0.0, a_n=a_n, b_n=b_n)
 
 
-def plot_truncated_series(s_n: partial) -> None:
+def plot_truncated_series(s_n: partial[np.ndarray]) -> None:
     for n in (5, 20, 100):
         plt.plot(X_VALUES, s_n(n=n), label=f"S_{n}(x)")
 
