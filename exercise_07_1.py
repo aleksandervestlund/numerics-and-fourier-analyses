@@ -23,7 +23,6 @@ def runge_kutta(
         k_2 = func(t_0 + h / 2, y_0 + h * k_1 / 2)
         k_3 = func(t_0 + h / 2, y_0 + h * k_2 / 2)
         k_4 = func(t_0 + h, y_0 + h * k_3)
-        print(k_1, k_2, k_3, k_4)
 
         t_0 += h
         y_0 += h * (k_1 + 2 * k_2 + 2 * k_3 + k_4) / 6
@@ -49,9 +48,8 @@ def main() -> None:
         error_1 = error_runge_kutta(f, actual_f, 0, 1, 2, h)
         error_2 = error_runge_kutta(f, actual_f, 0, 1, 2, next_h)
 
-        print(
-            f"Convergence: {np.log(error_1 / error_2) / np.log(h / next_h)} ≈ 4"
-        )
+        order = np.log(error_1 / error_2) / np.log(h / next_h)
+        print(f"Convergence: {order:.15f} ≈ {order:.0f}")
 
         h = next_h
 

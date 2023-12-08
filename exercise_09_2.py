@@ -7,6 +7,13 @@ import matplotlib.pyplot as plt
 X_VALUES = np.linspace(-3 * np.pi, 3 * np.pi, 1000)
 
 
+def convert_x_value(x: float) -> float:
+    x %= 2 * np.pi
+    if x > np.pi:
+        x -= 2 * np.pi
+    return x
+
+
 # Define the truncated series function
 def truncated_series(
     x: np.ndarray,
@@ -25,10 +32,7 @@ def truncated_series(
 
 def exercise_a() -> partial[np.ndarray]:
     def f(x: float) -> float:
-        while x < -np.pi:
-            x += 2 * np.pi
-        while x > np.pi:
-            x -= 2 * np.pi
+        x = convert_x_value(x)
 
         if 0 <= x < np.pi / 2:
             return x
@@ -44,7 +48,7 @@ def exercise_a() -> partial[np.ndarray]:
             2 * np.sin(n * np.pi / 2) - np.pi * n * np.cos(n * np.pi / 2)
         ) / (2 * np.pi * n**2)
 
-    plt.plot(X_VALUES, [f(x_value) for x_value in X_VALUES], label="f_a(x)")
+    plot_original_function(f)
     return partial(
         truncated_series, x=X_VALUES, a_0=np.pi / 16, a_n=a_n, b_n=b_n
     )
@@ -52,10 +56,7 @@ def exercise_a() -> partial[np.ndarray]:
 
 def exercise_b() -> partial[np.ndarray]:
     def f(x: float) -> float:
-        while x < -np.pi:
-            x += 2 * np.pi
-        while x > np.pi:
-            x -= 2 * np.pi
+        x = convert_x_value(x)
 
         if x <= 0:
             return 0.0
@@ -69,7 +70,7 @@ def exercise_b() -> partial[np.ndarray]:
     def b_n(n: int) -> float:
         return 2 * np.sin(np.pi * n / 2) / (np.pi * n**2)
 
-    plt.plot(X_VALUES, [f(x_value) for x_value in X_VALUES], label="f_b(x)")
+    plot_original_function(f)
     return partial(
         truncated_series, x=X_VALUES, a_0=np.pi / 8, a_n=a_n, b_n=b_n
     )
@@ -77,10 +78,7 @@ def exercise_b() -> partial[np.ndarray]:
 
 def exercise_c() -> partial[np.ndarray]:
     def f(x: float) -> float:
-        while x < -np.pi:
-            x += 2 * np.pi
-        while x > np.pi:
-            x -= 2 * np.pi
+        x = convert_x_value(x)
 
         if x <= -np.pi / 2:
             return -(np.pi + x)
@@ -94,8 +92,14 @@ def exercise_c() -> partial[np.ndarray]:
     def b_n(n: int) -> float:
         return (4 * np.sin(np.pi * n / 2)) / (np.pi * n**2)
 
-    plt.plot(X_VALUES, [f(x_value) for x_value in X_VALUES], label="f_c(x)")
+    plot_original_function(f)
     return partial(truncated_series, x=X_VALUES, a_0=0.0, a_n=a_n, b_n=b_n)
+
+
+def plot_original_function(function: Callable[[float], float]) -> None:
+    plt.plot(
+        X_VALUES, [function(x_value) for x_value in X_VALUES], label="f(x)"
+    )
 
 
 def plot_truncated_series(s_n: partial[np.ndarray]) -> None:
