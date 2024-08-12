@@ -6,8 +6,8 @@ def g(x: float) -> float:
 
 
 def main() -> None:
-    x = 0
-    x_old = 1
+    x = 0.0
+    x_old = 1.0
 
     while abs(x_old - x) > 1e-6:
         x_old = x

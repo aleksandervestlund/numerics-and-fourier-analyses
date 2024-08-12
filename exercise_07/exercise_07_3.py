@@ -1,7 +1,8 @@
 from collections.abc import Callable
 from functools import partial
-from matplotlib import pyplot as plt
+
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 def dydt(
@@ -68,16 +69,10 @@ def plot_euler_and_heun(
     u_2, du_2, v_2, dv_2 = np.array(heun(dy, t_0, y_0, t_n, n)).transpose()
 
     e_1 = (
-        m_1 * du_1**2
-        + m_2 * dv_1**2
-        + k_1 * u_1**2
-        + k_2 * (v_1 - u_1) ** 2
+        m_1 * du_1**2 + m_2 * dv_1**2 + k_1 * u_1**2 + k_2 * (v_1 - u_1) ** 2
     ) / 2
     e_2 = (
-        m_1 * du_2**2
-        + m_2 * dv_2**2
-        + k_1 * u_2**2
-        + k_2 * (v_2 - u_2) ** 2
+        m_1 * du_2**2 + m_2 * dv_2**2 + k_1 * u_2**2 + k_2 * (v_2 - u_2) ** 2
     ) / 2
 
     t = np.linspace(t_0, t_n, n + 1)

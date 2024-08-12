@@ -1,7 +1,8 @@
 from collections.abc import Callable
+
 import numpy as np
 
-from exercise_07_1 import runge_kutta
+from exercise_07.exercise_07_1 import runge_kutta
 
 
 def euler(
@@ -39,6 +40,8 @@ def heuns(
 
 
 def main() -> None:
+    # This will fail if run from this module
+
     args = (lambda t, y: -2 * t * y**2, 0.0, 1.0, 0.4)
     answer = 1 / (1 + 0.4**2)  # 25/29
 

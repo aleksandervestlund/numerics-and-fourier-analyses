@@ -1,7 +1,8 @@
 from collections.abc import Callable
 from functools import partial
+
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 
 
 X_VALUES = np.linspace(-3 * np.pi, 3 * np.pi, 1000)
